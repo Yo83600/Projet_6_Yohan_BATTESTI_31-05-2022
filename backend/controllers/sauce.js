@@ -1,5 +1,7 @@
 const Sauce = require('../models/sauce');
+const fs = require('fs');
 
+/* Créer une sauce */
 exports.createSauce = (req, res, next) => {
   
   req.body.sauce = JSON.parse(req.body.sauce);
@@ -29,6 +31,7 @@ exports.createSauce = (req, res, next) => {
   );
 };
 
+/* Afficher une seule sauce */
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({
     _id: req.params.id
@@ -45,59 +48,33 @@ exports.getOneSauce = (req, res, next) => {
   );
 };
 
+/* Modifier une sauce */
 exports.modifySauce = (req, res, next) => {
-  const sauce = new Sauce({
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    likes: 0,
-    dislikes: 0,
-    usersLiked: [' '],
-    usersdisLiked: [' '],
-  });
-  Sauce.updateOne({_id: req.params.id}, sauce).then(
-    () => {
-      res.status(201).json({
-        message: 'sauce updated successfully!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+  const sauceObject = req.file ?
+    {
+      ...JSON.parse(req.body.sauce),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+  Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+    .then(() => res.status(200).json({ message: 'Objet modifié !' }))
+    .catch(error => res.status(400).json({ error }));
 };
 
+/* Supprimer une sauce */
 exports.deleteSauce = (req, res, next) => {
-  Sauce.findOne({ _id: req.params.id }).then(
-    (sauce) => {
-      if (!sauce) {
-        res.status(404).json({
-          error: new Error('No such sauce!')
+    Sauce.findOne({ _id: req.params.id })
+      .then(sauce => {
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+          Sauce.deleteOne({ _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
+            .catch(error => res.status(400).json({ error }));
         });
-      }
-      if (sauce.userId !== req.auth.userId) {
-        res.status(400).json({
-          error: new Error('Unauthorized request!')
-        });
-      }
-      Sauce.deleteOne({ _id: req.params.id }).then(
-        () => {
-          res.status(200).json({
-            message: 'Deleted!'
-          });
-        }
-      ).catch(
-        (error) => {
-          res.status(400).json({
-            error: error
-          });
-        }
-      );
-    }
-  )
+      })
+      .catch(error => res.status(500).json({ error }));
 };
 
+/* Afficher toutes les sauces */
 exports.getAllSauce = (req, res, next) => {
   Sauce.find().then(
     (sauces) => {
