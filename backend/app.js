@@ -1,14 +1,20 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+
+//helmet
+//dot.env
+//rate limit 
+//Password validator
+
+//MongoDB -> créer user avec des accès limité
 
 
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
 
 /* Connexion à la base de donnée MongoDB */
-mongoose.connect('mongodb+srv://yo22:yoyo@cluster0.k9gdodd.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://app_hot_takes:monstre007@cluster0.k9gdodd.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
