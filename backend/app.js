@@ -4,12 +4,6 @@ const helmet = require('helmet');
 const path = require('path');
 require('dotenv').config();
 
-//rate limit 
-//Password validator
-
-//MongoDB -> créer user avec des accès limité
-
-
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
 
@@ -24,7 +18,6 @@ mongoose.connect(`mongodb+srv://${process.env.SECRET_USER}:${process.env.SECRET_
 const app = express();
 
 /* Middleware CORS - Ajout de headers à l'objet "response" */
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -37,7 +30,9 @@ app.use(express.json());
 /* Rendre le dossier "images" statique */
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+/* lancement de helmet */
 app.use(helmet());
+
 /* Enregistrement des routes dans l'application */
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', saucesRoutes);

@@ -1,3 +1,4 @@
+// création d'un models pour le mot de passe
 const passwordValidator = require('password-validator');
 
 const passwordSchema = new passwordValidator();
