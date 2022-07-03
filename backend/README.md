@@ -4,7 +4,8 @@ Une application dans laquelle les utilisateurs peuvent ajouter leurs sauces pré
 
 🔨   INSTALLATION
 
-- Cloner ce projet https://github.com/OpenClassrooms-Student-Center/dwj-projet6 depuis GitHub.
+- Cloner ce projet https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6 depuis GitHub.
+- Créer un dossier frontend et mettez a l'interieur les fichier/dossiers du projet Github télécharger ci-dessus
 - Ajouter le dossier backend dans le projet.
 
 💡   FAIRE TOURNER LE FRONTEND
