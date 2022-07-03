@@ -19,7 +19,9 @@ const createAccountLimiter = rateLimit({
     "trop de compte créér avec cette ip, essayer dans 1 heure",
 });
 
-router.post('/signup',createAccountLimiter,checkPassword, userCtrl.signup);
+// différentes routes pour les users
+
+router.post('/signup',createAccountLimiter, checkPassword, userCtrl.signup);
 router.post('/login',apiLimiter, userCtrl.login);
 
 module.exports = router;
